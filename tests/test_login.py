@@ -23,5 +23,9 @@ class TestLoginWithoutRecaptcha(HttpCase):
             data={"login": "admin", "password": "admin", "csrf_token": csrf_token},
             allow_redirects=False,
         )
-        self.assertEqual(response.status_code, 303, response.text[:500])
+        alert = re.search(r'class="alert[^"]*"[^>]*>\s*(.*?)\s*</', response.text, re.S)
+        self.assertEqual(
+            response.status_code, 303,
+            "Přihlášení neprošlo: %s" % (alert.group(1) if alert else response.text[:300]),
+        )
         self.assertNotIn("reCAPTCHA", response.text)
