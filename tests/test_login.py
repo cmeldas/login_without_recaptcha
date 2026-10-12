@@ -12,9 +12,10 @@ class TestLoginWithoutRecaptcha(HttpCase):
     def test_login_without_token_with_recaptcha_configured(self):
         """S nastavenými klíči reCAPTCHA a bez tokenu ve formuláři se přihlášení povede."""
         icp = self.env["ir.config_parameter"].sudo()
-        icp.set_param("recaptcha_public_key", "dummy-public-key")
-        icp.set_param("recaptcha_private_key", "dummy-private-key")
-        icp.set_param("enable_recaptcha", "True")
+        # Odoo 20 zrušilo set_param/get_param, parametry mají typové metody set_str/set_bool.
+        icp.set_str("recaptcha_public_key", "dummy-public-key")
+        icp.set_str("recaptcha_private_key", "dummy-private-key")
+        icp.set_bool("enable_recaptcha", True)
 
         page = self.url_open("/web/login")
         csrf_token = re.search(r'name="csrf_token"\s+value="([^"]+)"', page.text).group(1)
