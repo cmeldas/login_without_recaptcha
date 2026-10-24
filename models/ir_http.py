@@ -22,19 +22,24 @@ def _host_name(host):
         return ""
 
 
+def _is_local_host(host):
+    name = _host_name(host)
+    return name == "localhost" or _is_private_ip(name)
+
+
 def is_lan_request():
     """Požadavek z místní sítě na adresu serveru v místní síti.
 
-    Server je v prohlížeči zadaný privátní IP adresou (``192.168.100.9:8069``), ne doménou,
-    a klient i všechny adresy v ``X-Forwarded-For`` jsou privátní. Přístup přes veřejnou
-    doménu tím neprojde: hostitel je doména a reverse proxy připíše do ``X-Forwarded-For``
-    veřejnou IP návštěvníka (podvrhnout se dají jen adresy před ní).
+    Server je v prohlížeči zadaný privátní IP adresou (``192.168.100.9:8069``) nebo jako
+    ``localhost``, ne doménou, a klient i všechny adresy v ``X-Forwarded-For`` jsou privátní.
+    Přístup přes veřejnou doménu tím neprojde: hostitel je doména a reverse proxy připíše do
+    ``X-Forwarded-For`` veřejnou IP návštěvníka (podvrhnout se dají jen adresy před ní).
     """
     if not request:
         return False
     httprequest = request.httprequest
     forwarded = filter(None, map(str.strip, httprequest.headers.get("X-Forwarded-For", "").split(",")))
-    return _is_private_ip(_host_name(httprequest.host)) and all(
+    return _is_local_host(httprequest.host) and all(
         map(_is_private_ip, [httprequest.remote_addr or "", *forwarded])
     )
 

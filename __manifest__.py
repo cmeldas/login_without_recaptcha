@@ -12,11 +12,11 @@ IP adresa serveru v místní síti), přihlášení skončí chybou „Suspiciou
 detected by google reCAPTCHA“. Bez internetu se nepřihlásí vůbec.
 
 Modul reCAPTCHA vynechá u požadavků z místní sítě: server je v prohlížeči zadaný
-privátní IP adresou a klient i adresy v ``X-Forwarded-For`` jsou privátní. Stránka
+privátní IP adresou nebo jako ``localhost`` a klient i adresy v ``X-Forwarded-For`` jsou privátní. Stránka
 pak nenačítá skript Googlu a přihlášení (třeba na pokladně) funguje i při výpadku
 internetu. Přihlášení a formuláře přes veřejnou doménu chrání reCAPTCHA dál.
 """,
-    "version": "20.0.2.0.0",
+    "version": "20.0.2.0.1",
     "category": "Hidden/Tools",
     "author": "Matouš Čmelík",
     "website": "https://github.com/cmeldas/login_without_recaptcha",

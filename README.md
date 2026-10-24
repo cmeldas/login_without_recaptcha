@@ -13,8 +13,8 @@ veřejnou doménu chrání reCAPTCHA dál beze změny.
 
 Obě podmínky zároveň:
 
-1. server je v prohlížeči zadaný **privátní IP adresou** (`http://192.168.100.9:8069`), ne
-   doménou;
+1. server je v prohlížeči zadaný **privátní IP adresou** (`http://192.168.100.9:8069`) nebo
+   jako `localhost` (Odoo v Dockeru na vlastním počítači), ne doménou;
 2. klient (`remote_addr`) i všechny adresy v `X-Forwarded-For` jsou privátní nebo loopback.
 
 Přístup přes doménu (reverse proxy) má jako hostitele doménu, takže reCAPTCHA zůstane, i když
@@ -54,6 +54,7 @@ a s veřejnou IP v `X-Forwarded-For` přihlášení skončí chybou 422.
 
 ## Historie
 
+- `20.0.2.0.1`: za místní adresu serveru se bere i `localhost`.
 - `20.0.2.0.0`: reCAPTCHA se vynechává jen z místní sítě, přes veřejnou doménu zůstává.
   Modul závisí na `google_recaptcha` (dřív `web`) a přepisuje `ir.http` místo `res.users`.
 - `20.0.1.0.0` (a `19.0`): přihlašovací formulář reCAPTCHA neověřoval nikdy (chování Odoo 18).

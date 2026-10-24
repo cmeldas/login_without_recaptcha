@@ -58,6 +58,12 @@ class TestLoginWithoutRecaptcha(HttpCase):
         self.assertNotIn(PUBLIC_KEY, page.text)
         self._assert_logged_in(response)
 
+    def test_localhost_name_login_without_recaptcha(self):
+        """Server zadaný jako localhost (Odoo v Dockeru na vlastním PC, klient je brána Dockeru)."""
+        page, response = self._login({"Host": "localhost:8089", "X-Forwarded-For": "172.18.0.1"})
+        self.assertNotIn(PUBLIC_KEY, page.text)
+        self._assert_logged_in(response)
+
     def test_public_domain_keeps_recaptcha(self):
         """Přes doménu (reverse proxy) se reCAPTCHA ověřuje dál, i když je klient v LAN."""
         page, response = self._login({"Host": "nasamotach.cz", "X-Forwarded-For": "192.168.100.20"})
